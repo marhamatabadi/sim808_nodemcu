@@ -3,8 +3,7 @@
 SoftwareSerial mySerial(10,11 );// RX, TX
 String data[5];
 String state,timegps,latitude,longitude;
-String Phone= costumer;
-String Operator,Balance;
+String Ooperator,balance;
 String Phone = "xxxxxxxx"; // like a 0938*****75
  //---------------------------------------------------------
 
@@ -69,7 +68,7 @@ return response;
  void Operator_Setting(String Operator)
 {
  
-  String  oprator = service();
+  String  oprator = "Irancell";
     if(oprator == "Irancell"){
       mySerial.println("AT+CUSD=1,\"*555*4*3*2#\"");
     }
@@ -84,7 +83,7 @@ return response;
        mySerial.setTimeout(6000);
        String Balance_Read = mySerial.readString();
        delay(100);
-       mySerial.println(input );
+       mySerial.println("" );
        String firsword = "Credit";
        String lastword = "WOW";
        int Word1 = Balance_Read.indexOf(firsword) + firsword.length() ; 
@@ -109,7 +108,7 @@ return response;
      mySerial.setTimeout(100) ;
      String input = mySerial.readString();
      mySerial.setTimeout(10) ;
-     input = word_filter(input,"\"","\"");
+     input = "";
      
     input.trim();
     delay(10);
@@ -121,7 +120,7 @@ return response;
 }
 
  //---------------------------------------------------------
- String receive message(){
+ String receivemessage(){
 
     if(mySerial.find("CNMI")>=0){  
     mySerial.println("AT+CMGR=1") ; 
@@ -201,20 +200,20 @@ void setup() {
  
      while(1){               
   
-    Operator= Ooperator();
-     if(Operator=="nothing"){
-               Serial.println(Operator);
+   Ooperator = Operator();
+     if(Ooperator=="nothing"){
+               Serial.println(Ooperator);
     }// end if operator
       else{
-               Serial.println(Operator);                  
-               Operator_Setting(Operator);  
+               Serial.println(Ooperator);                  
+               Operator_Setting(Ooperator);  
                GSM_Initilaize(); 
-               Balance=balance(Ooperator());
+               balance= Balance(Ooperator);
             
             //  Send_Message(Phone, Balance);
               Send_Message(Phone, "Welcome to SIM808");
              
-              Serial.println(Balance);
+              Serial.println(balance);
          
      return;    
     } 
@@ -224,7 +223,7 @@ void setup() {
 } // end of Main
  //--------------------------------------------------------- 
 void loop() {
-       String Read_Message = receive_message();
+       String Read_Message = receivemessage();
        if(Read_Message != "0"){ 
               String phones = Get_PhoneNumber(Read_Message);
               delay(100);
